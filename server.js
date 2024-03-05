@@ -1,6 +1,6 @@
 const pg = require('pg')
 const express = require('express')
-const client = new pg.Client(process.env.DATABASE_URL || 'postgres://localhost/the_acme_flavors_db')
+const client = new pg.Client(process.env.DATABASE_URL || 'postgres://localhost/the_acme_flavors_categories_db')
 const app = express()
 
 app.use(express.json());
@@ -8,10 +8,10 @@ app.use(require('morgan')('dev'));
 
 //app routes
 app.post('/api/flavors', async (req, res, next) => {
-    try{
-        const SQL = `INSERT INTO flavors(name)
+    try{ 
+        const SQL = `INSERT INTO flavors(name, category_id)
         VALUES ($1)
-        RETURNING *`
+        RETURNING *`;
         const result = await client.query(SQL, [req.body.name])
         res.send(result.rows[0])
 
@@ -57,7 +57,7 @@ const init = async () => {
     await client.connect();
     console.log('connected to database')
     let SQL = `DROP TABLE IF EXISTS flavors;
-    CREATE TABLE flacvors(
+    CREATE TABLE flavors(
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
@@ -67,7 +67,7 @@ const init = async () => {
     await client.query(SQL)
     console.log('tables created')
     SQL = ` INSERT INTO flavors(name, is_favorite) VALUES('mango', 5);
-    INSERT INTO flavors(name, is_fovorite) VALUES('vanilla', 4);
+    INSERT INTO flavors(name, is_favorite) VALUES('vanilla', 4);
     INSERT INTO flavors(name, is_favorite) VALUES('stawberry', 2);`;
     await client.query(SQL);
     console.log('data seeded');
