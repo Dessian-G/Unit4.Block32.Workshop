@@ -61,14 +61,14 @@ const init = async () => {
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
-    is_favorite INTEGER DEFAULT 3 NOT NULL,
+    is_favorite BOOLEAN DEFAULT false NOT NULL,
     name VARCHAR(255) NOT NULL
     );`
     await client.query(SQL)
     console.log('tables created')
-    SQL = ` INSERT INTO flavors(name, is_favorite) VALUES('mango', 5);
-    INSERT INTO flavors(name, is_favorite) VALUES('vanilla', 4);
-    INSERT INTO flavors(name, is_favorite) VALUES('stawberry', 2);`;
+    SQL = ` INSERT INTO flavors(name) VALUES('mango');
+    INSERT INTO flavors(name ) VALUES('vanilla');
+    INSERT INTO flavors(name) VALUES('stawberry' );`;
     await client.query(SQL);
     console.log('data seeded');
 
